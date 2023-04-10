@@ -1,2 +1,5 @@
 /gh-organization-webhooks
 /gh-organization-webhooks.exe
+*.csv
+*.DS_Store*
+gh-organization-webhooks

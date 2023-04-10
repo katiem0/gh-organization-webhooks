@@ -9,12 +9,18 @@ import (
 
 func NewCmd() *cobra.Command {
 
-	cmd := cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "organization-webhooks <command> [flags]",
 		Short: "List and create organization webhooks.",
 		Long:  "List and create organization level webhooks.",
 	}
 
-	cmd.AddCommand(listCmd.NewCmdList(ctx))
-	cmd.AddCommand(createCmd.NewCmdCreate(ctx))
+	cmd.AddCommand(listCmd.NewListCmd())
+	cmd.AddCommand(createCmd.NewCreateCmd())
+	cmd.CompletionOptions.DisableDefaultCmd = true
+	cmd.SetHelpCommand(&cobra.Command{
+		Use:    "no-help",
+		Hidden: true,
+	})
+	return cmd
 }
