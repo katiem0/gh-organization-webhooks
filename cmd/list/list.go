@@ -8,6 +8,7 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/cli/go-gh"
@@ -26,7 +27,7 @@ type listCmdFlags struct {
 	debug    bool
 }
 
-func NewListCmd() *cobra.Command {
+func NewCmdList() *cobra.Command {
 	listCmdFlags := listCmdFlags{}
 	var authToken string
 
@@ -79,7 +80,7 @@ func NewListCmd() *cobra.Command {
 				return err
 			}
 
-			return runListCmd(owner, &listCmdFlags, data.NewAPIGetter(restClient), reportWriter)
+			return runCmdList(owner, &listCmdFlags, data.NewAPIGetter(restClient), reportWriter)
 		},
 	}
 
@@ -95,7 +96,7 @@ func NewListCmd() *cobra.Command {
 	return listCmd
 }
 
-func runListCmd(owner string, listCmdFlags *listCmdFlags, g *data.APIGetter, reportWriter io.Writer) error {
+func runCmdList(owner string, listCmdFlags *listCmdFlags, g *data.APIGetter, reportWriter io.Writer) error {
 	csvWriter := csv.NewWriter(reportWriter)
 
 	err := csvWriter.Write([]string{
@@ -127,7 +128,6 @@ func runListCmd(owner string, listCmdFlags *listCmdFlags, g *data.APIGetter, rep
 	if err != nil {
 		return err
 	}
-	fmt.Println(len(responseWebhooks))
 	zap.S().Debugf("Writing data for %d webhook(s) to output for organization %s", len(responseWebhooks), owner)
 	for _, webhook := range responseWebhooks {
 		err = csvWriter.Write([]string{
@@ -135,7 +135,7 @@ func runListCmd(owner string, listCmdFlags *listCmdFlags, g *data.APIGetter, rep
 			strconv.Itoa(webhook.ID),
 			webhook.Name,
 			strconv.FormatBool(webhook.Active),
-			fmt.Sprint(webhook.Events),
+			fmt.Sprint(strings.Join(webhook.Events, ";")),
 			webhook.Config.ContentType,
 			webhook.Config.InsecureSSL,
 			webhook.Config.Secret,

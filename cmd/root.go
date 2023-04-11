@@ -15,8 +15,8 @@ func NewCmd() *cobra.Command {
 		Long:  "List and create organization level webhooks.",
 	}
 
-	cmd.AddCommand(listCmd.NewListCmd())
-	cmd.AddCommand(createCmd.NewCreateCmd())
+	cmd.AddCommand(listCmd.NewCmdList())
+	cmd.AddCommand(createCmd.NewCmdCreate())
 	cmd.CompletionOptions.DisableDefaultCmd = true
 	cmd.SetHelpCommand(&cobra.Command{
 		Use:    "no-help",
