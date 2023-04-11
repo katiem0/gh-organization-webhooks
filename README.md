@@ -14,7 +14,7 @@ A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report contai
 * `Updated_At`: Date that the webhook was last updated.
 * `Created_At`: Date that the webhook was created.
 
-> *NOTE:*
+>**Note**
 > This extension does NOT retrieve the value of the webhook secret, and only identifies that one was created.
 
 ## Installation
