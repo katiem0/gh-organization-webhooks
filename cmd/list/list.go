@@ -148,7 +148,7 @@ func runCmdList(owner string, listCmdFlags *listCmdFlags, g *data.APIGetter, rep
 			zap.S().Error("Error raised in writing output", zap.Error(err))
 		}
 	}
-
+	fmt.Printf("Successfully listed organizational webhooks for %s", owner)
 	csvWriter.Flush()
 
 	return nil

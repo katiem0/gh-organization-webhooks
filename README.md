@@ -2,17 +2,17 @@
 
 A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report containing Webhooks defined at an Organization level. The `csv` report includes:
 
-* `Type`
-* `ID`
-* `Name`
-* `Active`
-* `Events`
-* `Config_ContentType`
-* `Config_InsecureSSL`
-* `Config_Secret`
-* `Config_URL`
-* `Updated_At`
-* `Created_At`
+* `Type`: Indicates that the Webhook was created at the `Organization` level.
+* `ID`: Associated `id` for the webhook.
+* `Name`: Must be passed as `web` if created from the API. Name can only be set to `web` or `email`.
+* `Active`: If notifications are sent when the webhook is triggered. Set to `true` to send notifications.
+* `Events`: What events the hook is triggered for. Set to `["*"]` to receive all possible events. The default is `["push"]`.
+* `Config_ContentType`: The media type used to serialize the payloads. Supported values include `json` and `form`. The default is `form`.
+* `Config_InsecureSSL`: Whether the SSL certificate of the host for url is verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`.
+* `Config_Secret`: If a `secret` was present when the Webhook was created, the report will return `********`.
+* `Config_URL`: The URL to which the payloads are delivered.
+* `Updated_At`: Date that the webhook was last updated.
+* `Created_At`: Date that the webhook was created.
 
 > *NOTE:*
 > This extension does NOT retrieve the value of the webhook secret, and only identifies that one was created.
@@ -26,7 +26,7 @@ A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report contai
   gh extension install katiem0/gh-organization-webhooks
   ```
 
-For more information: []`gh extension install`](https://cli.github.com/manual/gh_extension_install).
+For more information: [`gh extension install`](https://cli.github.com/manual/gh_extension_install).
 
 ## Usage
 
