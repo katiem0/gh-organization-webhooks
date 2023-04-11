@@ -1,18 +1,23 @@
 # gh-organization-webhooks
 
-A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report containing Webhooks defined at an Organization level. The `csv` report includes:
+A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report containing Webhooks defined at an Organization level, as well as create webhooks from a file or `source-org` under a new organization.
 
-* `Type`: Indicates that the Webhook was created at the `Organization` level.
-* `ID`: Associated `id` for the webhook.
-* `Name`: Must be passed as `web` if created from the API. Name can only be set to `web` or `email`.
-* `Active`: If notifications are sent when the webhook is triggered. Set to `true` to send notifications.
-* `Events`: What events the hook is triggered for. Set to `["*"]` to receive all possible events. The default is `["push"]`.
-* `Config_ContentType`: The media type used to serialize the payloads. Supported values include `json` and `form`. The default is `form`.
-* `Config_InsecureSSL`: Whether the SSL certificate of the host for url is verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`.
-* `Config_Secret`: If a `secret` was present when the Webhook was created, the report will return `********`.
-* `Config_URL`: The URL to which the payloads are delivered.
-* `Updated_At`: Date that the webhook was last updated.
-* `Created_At`: Date that the webhook was created.
+ The `csv` report includes:
+
+|Field Name | Description |
+|:----------|:------------|
+|`Type`| Indicates that the Webhook was created at the `Organization` level. |
+| `ID`| Associated `id` for the webhook.|
+| `Name`| Must be passed as `web` if created from the API. Name can only be set to `web` or `email`.|
+| `Active`| If notifications are sent when the webhook is triggered. Set to `true` to send notifications.|
+| `Events`| What events the hook is triggered for. Set to `["*"]` to receive all possible events. The default is `["push"]`. Output delimited by `;` when specific events selected. (i.e. `code_scanning_alert;discussion;push`)|
+| `Config_ContentType`| The media type used to serialize the payloads. Supported values include `json` and `form`. The default is `form`.|
+| `Config_InsecureSSL`| Whether the SSL certificate of the host for url is verified when delivering payloads. Supported values include `0` (verification is performed) and `1` (verification is not performed). The default is `0`.|
+| `Config_Secret`| If a `secret` was present when the Webhook was created, the report will return `********`.|
+| `Config_URL`| The URL to which the payloads are delivered.|
+| `Updated_At`| Date that the webhook was last updated.|
+| `Created_At`| Date that the webhook was created.|
+
 
 >**Note**
 > This extension does NOT retrieve the value of the webhook secret, and only identifies that one was created.
@@ -22,9 +27,9 @@ A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report contai
 1. Install the `gh` CLI - see the [installation](https://github.com/cli/cli#installation) instructions.
 
 2. Install the extension:
-  ```sh
-  gh extension install katiem0/gh-organization-webhooks
-  ```
+   ```sh
+   gh extension install katiem0/gh-organization-webhooks
+   ```
 
 For more information: [`gh extension install`](https://cli.github.com/manual/gh_extension_install).
 
@@ -51,6 +56,8 @@ Use "organization-webhooks [command] --help" for more information about a comman
 
 ### List Webhooks
 
+This extension will create a `csv` report of Organizational webhooks with the ability to specify the `--host-name` and `--token` associated to a Server instance. 
+
 ```sh
 $ gh organization-webhooks list -h
 List organization level webhooks
@@ -68,6 +75,18 @@ Flags:
 
 
 ### Create Webhooks
+
+Organization Webhooks can be created from a `csv` file using `--from-file` following the format outlined in [`gh-organization-webhooks`](#gh-organization-webhooks).
+
+* If specifying Webhooks `--from-file`, be sure to update the `csv` to replace the `Config_Secret` with the appropriate value. (Default value in file set to value of `********`).
+
+* If specifying a Source Organization (`--source-organization`) to retrieve secrets and create under a new Org, the `--source-token` is required.
+  * Webhooks that previously were created with a `secret` will be required to input a new `secret` value in the command prompt:
+    ```sh
+    $ gh organization-webhooks create Avocado-Extra-Charge  -o testing-webhooks
+     Please enter the new secret to be created with webhook http://testwebhook.com: 
+  
+    ```
 
 ```sh
 $ gh organization-webhooks create -h
