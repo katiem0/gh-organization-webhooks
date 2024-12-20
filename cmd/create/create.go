@@ -8,9 +8,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/cli/go-gh"
-	"github.com/cli/go-gh/pkg/api"
-	"github.com/cli/go-gh/pkg/auth"
+	"github.com/cli/go-gh/v2/pkg/api"
+	"github.com/cli/go-gh/v2/pkg/auth"
 	"github.com/katiem0/gh-organization-webhooks/internal/data"
 	"github.com/katiem0/gh-organization-webhooks/internal/log"
 	"github.com/spf13/cobra"
@@ -38,17 +37,17 @@ func NewCmdCreate() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		PreRunE: func(createCmd *cobra.Command, args []string) error {
 			if len(cmdFlags.fileName) == 0 && len(cmdFlags.sourceOrg) == 0 {
-				return errors.New("A file or source organization must be specified where webhooks will be created from.")
+				return errors.New("a file or source organization must be specified where webhooks will be created from")
 			} else if len(cmdFlags.sourceOrg) > 0 && len(cmdFlags.sourceToken) == 0 {
-				return errors.New("A Personal Access Token must be specified to access webhooks from the Source Organization.")
+				return errors.New("a Personal Access Token must be specified to access webhooks from the Source Organization")
 			} else if len(cmdFlags.fileName) > 0 && len(cmdFlags.sourceOrg) > 0 {
-				return errors.New("Specify only one of `--source-organization` or `from-file`.")
+				return errors.New("specify only one of `--source-organization` or `from-file`")
 			}
 			return nil
 		},
 		RunE: func(createCmd *cobra.Command, args []string) error {
 			var err error
-			var restClient api.RESTClient
+			var restClient *api.RESTClient
 
 			// Reinitialize logging if debugging was enabled
 			if cmdFlags.debug {
@@ -64,7 +63,7 @@ func NewCmdCreate() *cobra.Command {
 				authToken = t
 			}
 
-			restClient, err = gh.RESTClient(&api.ClientOptions{
+			restClient, err = api.NewRESTClient(api.ClientOptions{
 				Headers: map[string]string{
 					"Accept": "application/vnd.github+json",
 				},
@@ -118,7 +117,7 @@ func runCmdCreate(owner string, cmdFlags *cmdFlags, g *data.APIGetter) error {
 	} else if len(cmdFlags.sourceOrg) > 0 {
 		zap.S().Debugf("Reading in webhooks from %s", cmdFlags.sourceOrg)
 		var authToken string
-		var restSourceClient api.RESTClient
+		var restSourceClient *api.RESTClient
 
 		if cmdFlags.sourceToken != "" {
 			authToken = cmdFlags.sourceToken
@@ -127,7 +126,7 @@ func runCmdCreate(owner string, cmdFlags *cmdFlags, g *data.APIGetter) error {
 			authToken = t
 		}
 
-		restSourceClient, err := gh.RESTClient(&api.ClientOptions{
+		restSourceClient, err := api.NewRESTClient(api.ClientOptions{
 			Headers: map[string]string{
 				"Accept": "application/vnd.github+json",
 			},

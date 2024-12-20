@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/cli/go-gh/pkg/api"
+	"github.com/cli/go-gh/v2/pkg/api"
 	"go.uber.org/zap"
 	"golang.org/x/term"
 )
@@ -46,10 +46,10 @@ type Getter interface {
 }
 
 type APIGetter struct {
-	restClient api.RESTClient
+	restClient *api.RESTClient
 }
 
-func NewAPIGetter(restClient api.RESTClient) *APIGetter {
+func NewAPIGetter(restClient *api.RESTClient) *APIGetter {
 	return &APIGetter{
 		restClient: restClient,
 	}
@@ -60,14 +60,16 @@ func (g *APIGetter) GetOrganizationWebhooks(owner string) ([]byte, error) {
 
 	resp, err := g.restClient.Request("GET", url, nil)
 	if err != nil {
-		log.Printf("Body read error, %v", err)
+		log.Printf("Body read error")
+	} else {
+		defer resp.Body.Close()
+		responseData, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("Body read error")
+		}
+		return responseData, err
 	}
-	defer resp.Body.Close()
-	responseData, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Printf("Body read error, %v", err)
-	}
-	return responseData, err
+	return nil, err
 }
 
 func (g *APIGetter) CreateWebhookList(data [][]string) []CreatedWebhook {
