@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/cli/go-gh/pkg/api"
+	"github.com/cli/go-gh/v2/pkg/api"
 	"go.uber.org/zap"
 	"golang.org/x/term"
 )
@@ -46,10 +46,10 @@ type Getter interface {
 }
 
 type APIGetter struct {
-	restClient api.RESTClient
+	restClient *api.RESTClient
 }
 
-func NewAPIGetter(restClient api.RESTClient) *APIGetter {
+func NewAPIGetter(restClient *api.RESTClient) *APIGetter {
 	return &APIGetter{
 		restClient: restClient,
 	}
