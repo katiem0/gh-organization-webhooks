@@ -63,7 +63,7 @@ func NewCmdList() *cobra.Command {
 			})
 
 			if err != nil {
-				zap.S().Errorf("Error arose retrieving rest client")
+				zap.S().Errorf("Error arose retrieving rest client: %v", err)
 				return err
 			}
 
@@ -74,10 +74,11 @@ func NewCmdList() *cobra.Command {
 			}
 
 			reportWriter, err := os.OpenFile(listCmdFlags.listFile, os.O_WRONLY|os.O_CREATE, 0644)
-
 			if err != nil {
+				zap.S().Errorf("Error opening file: %v", err)
 				return err
 			}
+			defer reportWriter.Close()
 
 			return runCmdList(owner, data.NewAPIGetter(restClient), reportWriter)
 		},
@@ -119,6 +120,7 @@ func runCmdList(owner string, g *data.APIGetter, reportWriter io.Writer) error {
 	zap.S().Debugf("Gathering Webooks for %s", owner)
 	orgWebhooks, err := g.GetOrganizationWebhooks(owner)
 	if err != nil {
+		zap.S().Errorf("Error authenticating and getting response from webhooks endpoint for %v", owner)
 		return err
 	}
 

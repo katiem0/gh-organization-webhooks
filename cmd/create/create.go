@@ -37,11 +37,11 @@ func NewCmdCreate() *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		PreRunE: func(createCmd *cobra.Command, args []string) error {
 			if len(cmdFlags.fileName) == 0 && len(cmdFlags.sourceOrg) == 0 {
-				return errors.New("A file or source organization must be specified where webhooks will be created from.")
+				return errors.New("a file or source organization must be specified where webhooks will be created from")
 			} else if len(cmdFlags.sourceOrg) > 0 && len(cmdFlags.sourceToken) == 0 {
-				return errors.New("A Personal Access Token must be specified to access webhooks from the Source Organization.")
+				return errors.New("a Personal Access Token must be specified to access webhooks from the Source Organization")
 			} else if len(cmdFlags.fileName) > 0 && len(cmdFlags.sourceOrg) > 0 {
-				return errors.New("Specify only one of `--source-organization` or `from-file`.")
+				return errors.New("specify only one of `--source-organization` or `from-file`")
 			}
 			return nil
 		},

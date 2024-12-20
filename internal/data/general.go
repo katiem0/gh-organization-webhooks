@@ -60,14 +60,16 @@ func (g *APIGetter) GetOrganizationWebhooks(owner string) ([]byte, error) {
 
 	resp, err := g.restClient.Request("GET", url, nil)
 	if err != nil {
-		log.Printf("Body read error, %v", err)
+		log.Printf("Body read error")
+	} else {
+		defer resp.Body.Close()
+		responseData, err := io.ReadAll(resp.Body)
+		if err != nil {
+			log.Printf("Body read error")
+		}
+		return responseData, err
 	}
-	defer resp.Body.Close()
-	responseData, err := io.ReadAll(resp.Body)
-	if err != nil {
-		log.Printf("Body read error, %v", err)
-	}
-	return responseData, err
+	return nil, err
 }
 
 func (g *APIGetter) CreateWebhookList(data [][]string) []CreatedWebhook {
