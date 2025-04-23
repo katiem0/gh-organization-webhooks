@@ -1,6 +1,14 @@
 # gh-organization-webhooks
 
-A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report containing Webhooks defined at an Organization level, as well as create webhooks from a file or `source-org` under a new organization.
+[![GitHub Release](https://img.shields.io/github/v/release/katiem0/gh-organization-webhooks?style=flat&logo=github)](https://github.com/katiem0/gh-organization-webhooks/releases)
+[![PR Checks](https://github.com/katiem0/gh-organization-webhooks/actions/workflows/main.yml/badge.svg)](https://github.com/katiem0/gh-organization-webhooks/actions/workflows/main.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Go Report Card](https://goreportcard.com/badge/github.com/katiem0/gh-organization-webhooks)](https://goreportcard.com/report/github.com/katiem0/gh-organization-webhooks)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/katiem0/gh-organization-webhooks)](https://go.dev/)
+
+A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report containing Webhooks
+defined at an Organization level, as well as create webhooks from a file or `source-org` under
+a new organization.
 
  The `csv` report includes:
 
@@ -18,15 +26,16 @@ A GitHub `gh` [CLI](https://cli.github.com/) extension to create a report contai
 | `Updated_At`| Date that the webhook was last updated.|
 | `Created_At`| Date that the webhook was created.|
 
-
 >**Note**
-> This extension does NOT retrieve the value of the webhook secret, and only identifies that one was created.
+> This extension does NOT retrieve the value of the webhook secret, and only identifies
+> that one was created.
 
 ## Installation
 
 1. Install the `gh` CLI - see the [installation](https://github.com/cli/cli#installation) instructions.
 
 2. Install the extension:
+
    ```sh
    gh extension install katiem0/gh-organization-webhooks
    ```
@@ -35,7 +44,8 @@ For more information: [`gh extension install`](https://cli.github.com/manual/gh_
 
 ## Usage
 
-This extension supports listing and creating webhooks between `GitHub.com` and GitHub Enterprise Server, through the use of `--hostname` and `--source-hostname`.
+This extension supports listing and creating webhooks between `GitHub.com` and GitHub
+Enterprise Server, through the use of `--hostname` and `--source-hostname`.
 
 ```sh
 $ gh organization-webhooks -h 
@@ -56,7 +66,8 @@ Use "organization-webhooks [command] --help" for more information about a comman
 
 ### List Webhooks
 
-This extension will create a `csv` report of Organizational webhooks with the ability to specify the `--host-name` and `--token` associated to a Server instance. 
+This extension will create a `csv` report of Organizational webhooks with the ability to
+specify the `--host-name` and `--token` associated to a Server instance.
 
 ```sh
 $ gh organization-webhooks list -h
@@ -73,15 +84,19 @@ Flags:
   -t, --token string         GitHub personal access token for reading source organization (default "gh auth token")
 ```
 
-
 ### Create Webhooks
 
-Organization Webhooks can be created from a `csv` file using `--from-file` following the format outlined in [`gh-organization-webhooks`](#gh-organization-webhooks).
+Organization Webhooks can be created from a `csv` file using `--from-file` following the format
+outlined in [`gh-organization-webhooks`](#gh-organization-webhooks).
 
-* If specifying Webhooks `--from-file`, be sure to update the `csv` to replace the `Config_Secret` with the appropriate value. (Default value in file set to value of `********`).
+* If specifying Webhooks `--from-file`, be sure to update the `csv` to replace the `Config_Secret`
+  with the appropriate value. (Default value in file set to value of `********`).
 
-* If specifying a Source Organization (`--source-organization`) to retrieve secrets and create under a new Org, the `--source-token` is required.
-  * Webhooks that previously were created with a `secret` will be required to input a new `secret` value in the command prompt:
+* If specifying a Source Organization (`--source-organization`) to retrieve secrets and create under
+  a new Org, the `--source-token` is required.
+  * Webhooks that previously were created with a `secret` will be required to input a new `secret`
+    value in the command prompt:
+
     ```sh
     $ gh organization-webhooks create Avocado-Extra-Charge  -o testing-webhooks
      Please enter the new secret to be created with webhook http://testwebhook.com: 
