@@ -26,7 +26,7 @@ a new organization.
 | `Updated_At`| Date that the webhook was last updated.|
 | `Created_At`| Date that the webhook was created.|
 
->**Note**
+> [!NOTE]
 > This extension does NOT retrieve the value of the webhook secret, and only identifies
 > that one was created.
 
