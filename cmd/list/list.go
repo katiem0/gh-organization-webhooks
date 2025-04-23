@@ -78,7 +78,11 @@ func NewCmdList() *cobra.Command {
 				zap.S().Errorf("Error opening file: %v", err)
 				return err
 			}
-			defer reportWriter.Close()
+			defer func() {
+				if err := reportWriter.Close(); err != nil {
+					zap.S().Errorf("Error closing file: %v", err)
+				}
+			}()
 
 			return runCmdList(owner, data.NewAPIGetter(restClient), reportWriter)
 		},

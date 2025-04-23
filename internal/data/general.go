@@ -62,7 +62,11 @@ func (g *APIGetter) GetOrganizationWebhooks(owner string) ([]byte, error) {
 	if err != nil {
 		log.Printf("Body read error")
 	} else {
-		defer resp.Body.Close()
+		defer func() {
+			if err := resp.Body.Close(); err != nil {
+				log.Printf("Error closing response body: %v", err)
+			}
+		}()
 		responseData, err := io.ReadAll(resp.Body)
 		if err != nil {
 			log.Printf("Body read error")
@@ -96,7 +100,11 @@ func (g *APIGetter) CreateOrganizationWebhook(owner string, data io.Reader) erro
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Printf("Error closing response body: %v", err)
+		}
+	}()
 	return err
 }
 
@@ -107,7 +115,11 @@ func GetSourceOrganizationWebhooks(owner string, g *APIGetter) ([]byte, error) {
 	if err != nil {
 		log.Printf("Body read error, %v", err)
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if err := resp.Body.Close(); err != nil {
+			log.Printf("Error closing response body: %v", err)
+		}
+	}()
 	responseData, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Printf("Body read error, %v", err)

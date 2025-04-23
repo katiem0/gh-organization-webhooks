@@ -102,8 +102,11 @@ func runCmdCreate(owner string, cmdFlags *cmdFlags, g *data.APIGetter) error {
 		if err != nil {
 			zap.S().Errorf("Error arose opening webhooks csv file")
 		}
-		// remember to close the file at the end of the program
-		defer f.Close()
+		defer func() {
+			if err := f.Close(); err != nil {
+				zap.S().Errorf("Error closing file: %v", err)
+			}
+		}()
 
 		// read csv values using csv.Reader
 		csvReader := csv.NewReader(f)
