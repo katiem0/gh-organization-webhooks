@@ -3,7 +3,7 @@ module github.com/katiem0/gh-organization-webhooks
 go 1.23.0
 
 require (
-	github.com/cli/go-gh/v2 v2.12.0
+	github.com/cli/go-gh/v2 v2.12.1
 	github.com/spf13/cobra v1.9.1
 	go.uber.org/zap v1.27.0
 	golang.org/x/term v0.31.0
