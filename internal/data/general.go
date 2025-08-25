@@ -98,14 +98,20 @@ func (g *APIGetter) CreateOrganizationWebhook(owner string, data io.Reader) erro
 
 	resp, err := g.restClient.Request("POST", url, data)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer func() {
 		if err := resp.Body.Close(); err != nil {
 			log.Printf("Error closing response body: %v", err)
 		}
 	}()
-	return err
+
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		bodyBytes, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("unexpected status code: %d, body: %s", resp.StatusCode, string(bodyBytes))
+	}
+
+	return nil
 }
 
 func GetSourceOrganizationWebhooks(owner string, g *APIGetter) ([]byte, error) {
